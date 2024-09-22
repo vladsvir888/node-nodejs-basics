@@ -1,17 +1,19 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
-import { readdir, writeFile } from "fs/promises";
+import { writeFile } from "fs/promises";
+import { errorText, checkPathExist } from "../helpers/index.js";
 
 const create = async () => {
   const __dirname = dirname(fileURLToPath(import.meta.url));
-  const filesPath = join(__dirname, "files");
-  const files = await readdir(filesPath);
+  const filePath = join(__dirname, "files/fresh.txt");
 
-  if (files.includes("fresh.txt")) {
-    throw new Error("FS operation failed");
+  const isFileExist = await checkPathExist(filePath);
+
+  if (isFileExist) {
+    throw new Error(errorText);
   }
 
-  writeFile(join(filesPath, "fresh.txt"), "I am fresh and young");
+  writeFile(filePath, "I am fresh and young");
 };
 
 await create();
