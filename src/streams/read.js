@@ -7,9 +7,7 @@ const read = async () => {
   const file = join(__dirname, "files/fileToRead.txt");
   const stream = createReadStream(file);
 
-  stream.on("data", (chunk) => {
-    process.stdout.write(chunk);
-  });
+  stream.pipe(process.stdout);
 
   stream.on("error", (err) => {
     console.log(`Error: ${err.message}`);
