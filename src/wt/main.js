@@ -19,7 +19,7 @@ const performCalculations = async () => {
         });
 
         worker.on("message", (data) => resolve({ status: "resolved", data }));
-        worker.on("error", () => reject({ status: "error", data: null }));
+        worker.on("error", () => resolve({ status: "error", data: null }));
         worker.on("exit", (code) => {
           if (code !== 0) {
             reject(new Error(`Worker stopped with exit code ${code}`));
