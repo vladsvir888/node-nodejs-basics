@@ -1,7 +1,8 @@
 import { Transform } from "stream";
+import { pipeline } from "stream/promises";
 
 const transform = async () => {
-  const reverseTransformStream = new Transform({
+  const tstream = new Transform({
     transform(chunk, encoding, callback) {
       const transformedData = chunk
         .toString()
@@ -16,7 +17,7 @@ const transform = async () => {
     },
   });
 
-  process.stdin.pipe(reverseTransformStream).pipe(process.stdout);
+  await pipeline(process.stdin, tstream, process.stdout);
 };
 
 await transform();

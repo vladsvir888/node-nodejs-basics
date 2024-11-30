@@ -1,17 +1,18 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { readdir } from "fs/promises";
-import { errorText, checkPathExist } from "../helpers/index.js";
 
 const list = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const filesPath = join(__dirname, "files");
 
-  if (!(await checkPathExist(filesPath))) {
-    throw new Error(errorText);
+  try {
+    const files = await readdir(filesPath);
+    console.log(files);
+  } catch {
+    throw new Error("FS operation failed");
   }
-
-  console.log(await readdir(filesPath));
 };
 
 await list();

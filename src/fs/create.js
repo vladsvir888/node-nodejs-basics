@@ -1,19 +1,17 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { writeFile } from "fs/promises";
-import { errorText, checkPathExist } from "../helpers/index.js";
 
 const create = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const filePath = join(__dirname, "files/fresh.txt");
 
-  const isFileExist = await checkPathExist(filePath);
-
-  if (isFileExist) {
-    throw new Error(errorText);
+  try {
+    await writeFile(filePath, "I am fresh and young", { flag: "wx" });
+  } catch {
+    throw new Error("FS operation failed");
   }
-
-  writeFile(filePath, "I am fresh and young");
 };
 
 await create();

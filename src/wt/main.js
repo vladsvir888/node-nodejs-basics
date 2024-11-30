@@ -4,7 +4,8 @@ import { Worker } from "worker_threads";
 import os from "os";
 
 const performCalculations = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const cpuCores = os.cpus();
   const start = 10;
   const end = start + cpuCores.length;

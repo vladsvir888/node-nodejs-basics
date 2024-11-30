@@ -1,31 +1,26 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { copyFile, mkdir, readdir } from "fs/promises";
-import { errorText, checkPathExist } from "../helpers/index.js";
 
 const copy = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const filesPath = join(__dirname, "files");
   const filesCopyPath = join(__dirname, "files_copy");
 
-  const isFilesDirExist = await checkPathExist(filesPath);
+  try {
+    const files = await readdir(filesPath);
 
-  if (!isFilesDirExist) {
-    throw new Error(errorText);
-  }
+    await mkdir(filesCopyPath);
 
-  const isFilesCopyDirExist = await checkPathExist(filesCopyPath);
+    for (const file of files) {
+      const fileFromFiles = join(filesPath, file);
+      const fileFromFilesCopy = join(filesCopyPath, file);
 
-  if (isFilesCopyDirExist) {
-    throw new Error(errorText);
-  }
-
-  await mkdir(filesCopyPath);
-
-  const files = await readdir(filesPath);
-
-  for (const file of files) {
-    await copyFile(join(filesPath, file), join(filesCopyPath, file));
+      await copyFile(fileFromFiles, fileFromFilesCopy);
+    }
+  } catch {
+    throw new Error("FS operation failed");
   }
 };
 

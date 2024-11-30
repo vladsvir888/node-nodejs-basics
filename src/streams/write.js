@@ -3,13 +3,15 @@ import { fileURLToPath } from "url";
 import { createWriteStream } from "fs";
 
 const write = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const file = join(__dirname, "files/fileToWrite.txt");
-  const stream = createWriteStream(file);
 
-  process.stdin.pipe(stream);
+  const wstream = createWriteStream(file);
 
-  stream.on("error", (err) => {
+  process.stdin.pipe(wstream);
+
+  wstream.on("error", (err) => {
     console.log(`Error: ${err.message}`);
   });
 };

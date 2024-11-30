@@ -4,20 +4,21 @@ import { createHash } from "crypto";
 import { createReadStream } from "fs";
 
 const calculateHash = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const file = join(__dirname, "files/fileToCalculateHashFor.txt");
   const hash = createHash("sha256");
-  const stream = createReadStream(file);
+  const rstream = createReadStream(file);
 
-  stream.on("data", (chunk) => {
+  rstream.on("data", (chunk) => {
     hash.update(chunk);
   });
 
-  stream.on("end", () => {
+  rstream.on("end", () => {
     console.log(`SHA256 hash as hex: ${hash.digest("hex")}`);
   });
 
-  stream.on("error", (err) => {
+  rstream.on("error", (err) => {
     console.log(`Error: ${err.message}`);
   });
 };

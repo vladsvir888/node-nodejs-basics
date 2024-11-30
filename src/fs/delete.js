@@ -1,17 +1,17 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { rm } from "fs/promises";
-import { errorText, checkPathExist } from "../helpers/index.js";
 
 const remove = async () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const filePath = join(__dirname, "files/fileToRemove.txt");
 
-  if (!(await checkPathExist(filePath))) {
-    throw new Error(errorText);
+  try {
+    await rm(filePath);
+  } catch (err) {
+    throw new Error("FS operation failed");
   }
-
-  rm(filePath);
 };
 
 await remove();
